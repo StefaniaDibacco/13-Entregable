@@ -4,6 +4,8 @@ import { Productos } from './models/claseProductos';
 export const init = (app) => {
   const io = socket(app);
   const productController = new Productos();
+  const messages = [];
+  let users = [];
 
   io.on('connection', (socket) => {
       console.log('conectado');
@@ -24,6 +26,29 @@ export const init = (app) => {
               socket.emit('producto-update', productos);
              }
          });
+
+         socket.on('new-message', function (data) {
+          const newMessage = {
+            mailId: "",
+            message: data,
+          };
+          console.log(newMessage);
+          messages.push(newMessage);
+      
+
+          socket.emit('messages', messages);
+      
+
+        });
+      
+        socket.on('askData', (data) => {
+          console.log('ME LLEGO DATA');
+          socket.emit('messages', messages);
+        });
+
+
+
+
       });
 
   return io;

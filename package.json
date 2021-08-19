@@ -1,5 +1,5 @@
 {
-  "name": "12entregable",
+  "name": "13-entregable",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "express-handlebars": "^5.3.3",
+    "moment": "^2.29.1",
     "socket.io": "^4.1.3"
   }
 }

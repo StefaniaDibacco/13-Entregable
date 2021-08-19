@@ -27,28 +27,41 @@ const addTr = (product) => {
 
 }
 
-socket.emit('askData');
-
-function sendData(e) {
-  const input = document.getElementById('pepe');
-  socket.emit('new-message', input.value);
-}
 
 function render(data) {
   console.log(data);
-  var html = data
-    .map(function (elem, index) {
-      return `<div>
-                 <strong>Socket Id: ${elem.socketId} => </strong>:
-                 <em>${elem.message}</em>
-        </div>`;
-    })
-    .join(' ');
-
-  document.getElementById('messages').innerHTML = html;
+  var html = data.map (elem => {
+    return (`<div>
+      <span class="email">${elem.author}</span>
+      <span class="date"> [ ${elem.time} ]: </span>
+      <span class="text">${elem.text}</span>
+     </div>`)
+  }).join(" ");
+  
+  
+  document.getElementById('messages').innerHTML += html;
 }
 
-socket.on('messages', function (data) {
-  console.log('RECIBI MENSAJE');
+socket.on('message-update', function (data) {
+  console.log('RECIBI MENSAJE message-update',data);
   render(data);
 });
+
+
+const offFocus = () => {
+  console.log("perdí foco");
+  document.getElementById('messages').innerHTML = '';
+  const author = document.getElementById('username').value;
+  socket.emit('inicio-messages', author);
+
+} 
+
+function addMessage(e){
+  var mensaje={
+    author: document.getElementById('username').value,
+    text: document.getElementById('texto').value,
+  };
+  document.getElementById('texto').value="";
+  socket.emit('new-message', mensaje);
+  return false;
+}

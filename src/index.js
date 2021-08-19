@@ -1,10 +1,9 @@
 import express from 'express';
 import handlebars from 'express-handlebars';
 import * as http from 'http';
-//import io from 'socket.io';
 import path from 'path';
 import routerProductos from './routes/productos.js';
-import {init} from './sockets';
+import {init} from './services/sockets';
 
 
 

@@ -6,11 +6,6 @@ export const init = (app) => {
   const io = socket(app);
   const productController = new Productos();
   const messages = []
-  /*const data= {
-    username: undefined,
-    text: undefined,
-  };*/
-  
 
   io.on('connection', (socket) => {
       console.log('conectado');
@@ -26,37 +21,24 @@ export const init = (app) => {
       socket.on('inicio-productos', async() => {
           console.log('inicio lista de productos productos');
           const productos = await productController.leer();
-          //console.log(productos);
           if (productos.length > 0) {
             socket.emit('producto-update', productos);
             }
       });
 
-        
-
-      socket.on('new-message', function (data) {
+      socket.on('inicio-messages', (data) => {
+        console.log('ME LLEGO DATA inicio de messages');
+        console.log(data);
+        socket.emit('message-update', messages);
+      });
+          
+      socket.on('new-message', (data) => {
         const formatdata = formatMessages(data);
         messages.push(formatdata);
-        socket.emit('message-update', [formatdata]);//envia mensaje a todos (corregir)
+        io.emit('message-update', [formatdata]);
       });
       
-      socket.on('inicio-messages', (author) => {
-        console.log('ME LLEGO DATA inicio de messages');
-        console.log(messages);
-        if (messages.length > 0 ) {
-          let filterMessage = messages;       
-          if (author !== 'admin') {
-            filterMessage = messages.filter(m => m.author === author);       
-          }
-          socket.emit('message-update', filterMessage);
-        }
-        
-      });
-
-
-
-
-      });
+    });
 
   return io;
 };

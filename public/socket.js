@@ -30,29 +30,21 @@ const addTr = (product) => {
 
 function render(data) {
   console.log(data);
-  var html = data.map (elem => {
+  var html = data.map ((elem, index) => {
     return (`<div>
       <span class="email">${elem.author}</span>
       <span class="date"> [ ${elem.time} ]: </span>
       <span class="text">${elem.text}</span>
      </div>`)
   }).join(" ");
-  
-  
   document.getElementById('messages').innerHTML += html;
 }
-
-socket.on('message-update', function (data) {
-  console.log('RECIBI MENSAJE message-update',data);
-  render(data);
-});
-
 
 const offFocus = () => {
   console.log("perdí foco");
   document.getElementById('messages').innerHTML = '';
   const author = document.getElementById('username').value;
-  socket.emit('inicio-messages', author);
+  socket.emit('inicio-messages');
 
 } 
 
@@ -65,3 +57,8 @@ function addMessage(e){
   socket.emit('new-message', mensaje);
   return false;
 }
+
+socket.on('message-update', function (data) {
+  console.log('RECIBI MENSAJE message-update',data);
+  render(data);
+});
